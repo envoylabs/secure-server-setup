@@ -55,4 +55,6 @@ Security:
 ansible-playbook main_security.yml
 ```
 
-That's it!
+## TMKMS
+
+In order to use TMKMS you will need to set the `priv_validator_laddr` in `config.toml` to `"tcp://0.0.0.0:{{ remote_signer_laddr_port }}"`

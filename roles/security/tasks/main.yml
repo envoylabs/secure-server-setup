@@ -25,6 +25,9 @@
 - name: open alternative ssh port
   command: 'ufw allow {{ ssh_port }}/tcp'
 
+- name: open remote signer port
+  command: 'ufw allow from {{ remote_signer_ip }} to any port {{ remote_signer_laddr_port }}'
+
 - name: close standard ssh port
   command: ufw deny 22/tcp
 
