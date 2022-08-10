@@ -28,6 +28,9 @@
 - name: open remote signer port
   command: 'ufw allow from {{ remote_signer_ip }} to any port {{ remote_signer_laddr_port }}'
 
+- name: open consensus port
+  command: 'ufw allow {{ p2p_port }}'
+
 - name: close standard ssh port
   command: ufw deny 22/tcp
 
