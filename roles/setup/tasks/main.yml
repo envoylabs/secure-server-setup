@@ -14,6 +14,12 @@
 - name: Install essentials
   import_tasks: install_essentials.yml
 
+- name: Install cosmos pre-reqs like go
+  import_tasks: install_cosmos.yml
+
+- name: Install cosmovisor
+  import_tasks: install_cosmovisor.yml
+
 - name: Install node exporter
   import_tasks: install_node_exporter.yml
   when: node_exporter|default(false)|bool == true

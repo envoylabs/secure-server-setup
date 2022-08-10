@@ -1,0 +1,60 @@
+---
+- name: install apt packages
+  apt:
+    name: '{{item}}'
+    state: present
+    update_cache: yes
+  loop:
+    - make
+    - build-essential
+    - gcc
+    - git
+    - jq
+    - chrony
+
+- name: Download go
+  get_url:
+    url: 'https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz'
+    dest: '/tmp/go{{ go_version }}.linux-amd64.tar.gz'
+    mode: '0700'
+
+- name: unarchive go
+  unarchive:
+    src: '/tmp/go{{ go_version }}.linux-amd64.tar.gz'
+    remote_src: yes
+    dest: '/usr/local/'
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Change go folder permission
+  file:
+    path: '{{ user_dir }}/go'
+    owner: '{{ deployment_user }}'
+    group: '{{ deployment_user }}'
+    recurse: true
+    mode: '0755'
+
+- name: copy .profile
+  template:
+    src: 'profile.j2'
+    dest: '{{ user_dir }}/.profile'
+    owner: '{{ deployment_user }}'
+    group: '{{ deployment_user }}'
+    mode: '0600'
+
+- name: Add DAEMON_NAME line in .profile
+  lineinfile:
+    path: '{{ user_dir }}/.profile'
+    regexp: 'export DAEMON_NAME='
+    line: 'export DAEMON_NAME={{ daemon }}'
+    state: present
+  when: daemon is defined
+
+- name: Add DAEMON_HOME line in .profile
+  lineinfile:
+    path: '{{ user_dir }}/.profile'
+    regexp: 'export DAEMON_HOME='
+    line: 'export DAEMON_HOME=$HOME/{{ daemon_folder }}'
+    state: present
+  when: daemon_folder is defined

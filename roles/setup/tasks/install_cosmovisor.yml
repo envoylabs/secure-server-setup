@@ -1,0 +1,32 @@
+---
+- name: Go get cosmovisor
+  command: 'go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@{{ cosmovisor_version }}'
+  environment:
+    PATH: '{{ path }}'
+    GOPATH: '{{ user_dir }}/go'
+
+- name: Create cosmovisor directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+  with_items:
+    - '{{ user_dir }}/{{ daemon_folder }}/cosmovisor/genesis/bin'
+    - '{{ user_dir }}/{{ daemon_folder }}/cosmovisor/upgrades'
+
+- name: Change binary folder permission
+  file:
+    path: '{{ user_dir }}/{{ daemon_folder }}'
+    owner: '{{ deployment_user }}'
+    group: '{{ deployment_user }}'
+    recurse: true
+    mode: '0755'
+
+- name: copy service file
+  become: true
+  template:
+    src: 'cosmovisor.j2'
+    dest: '/etc/systemd/system/cosmovisor.service'
+    owner: root
+    group: root
+    mode: '0644'
