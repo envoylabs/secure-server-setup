@@ -23,6 +23,8 @@ promtail_monitor='http://192.168.0.0:3100'
 promtail_name=something
 
 # Cosmos
+install_cosmos=true
+install_cosmovisor=true
 go_version=1.19
 cosmovisor_version='v1.0.0'
 user_dir="/home/{{deployment_user}}"

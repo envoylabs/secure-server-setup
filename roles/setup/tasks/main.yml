@@ -16,9 +16,11 @@
 
 - name: Install cosmos pre-reqs like go
   import_tasks: install_cosmos.yml
+  when: install_cosmos|default(false)|bool == true
 
 - name: Install cosmovisor
   import_tasks: install_cosmovisor.yml
+  when: install_cosmovisor|default(false)|bool == true
 
 - name: Install node exporter
   import_tasks: install_node_exporter.yml
