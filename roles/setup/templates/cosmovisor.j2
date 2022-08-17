@@ -3,7 +3,7 @@ Description=cosmovisor
 After=network-online.target
 
 [Service]
-User={{ ansible_user }}
+User={{ deployment_user }}
 ExecStart={{ user_dir }}/go/bin/cosmovisor start
 Restart=always
 RestartSec=3
